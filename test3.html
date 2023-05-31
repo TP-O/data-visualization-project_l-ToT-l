@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <title>Data visualization</title>
+    <style type="text/css">
+      table th,
+      table td {
+        padding: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <div>
+        <input type="file" name="file" id="file" accept=".csv" /> <br /><br />
+        <input
+          type="button"
+          id="btnsubmit"
+          value="Submit"
+          onclick="readCSVFile();"
+        />
+      </div>
+
+      <br /><br />
+      <!-- List CSV file data -->
+      <div id="pie-chart">
+        <svg height="210" width="400"></svg>
+        <div class="color-list"></div>
+      </div>
+    </div>
+    <script>
+      const randomRgbColor = () => {
+        let r = Math.floor(Math.random() * 256); // Random between 0-255
+        let g = Math.floor(Math.random() * 256); // Random between 0-255
+        let b = Math.floor(Math.random() * 256); // Random between 0-255
+        return "rgb(" + r + "," + g + "," + b + ")";
+      };
+
+      function readCSVFile() {
+        var files = document.querySelector("#file").files;
+
+        if (files.length > 0) {
+          // Selected file
+          var file = files[0];
+
+          // FileReader Object
+          var reader = new FileReader();
+
+          // Read file as string
+          reader.readAsText(file);
+
+          // Load event
+          reader.onload = function (event) {
+            // Read file data
+            var csvdata = event.target.result;
+
+            // Split by line break to gets rows Array
+            var rowData = csvdata.split("\n");
+
+            // console.log(rowData);
+
+            var title = rowData[0].split(",");
+            title.shift();
+            console.log(title);
+
+            var firstRow = rowData[1].split(",");
+            firstRow.shift();
+            console.log(firstRow);
+
+            var colorFirstRow = firstRow.map((ele) => randomRgbColor());
+
+            var svg = d3.select("svg"),
+              width = svg.attr("width"),
+              height = svg.attr("height"),
+              radius = Math.min(width, height) / 2,
+              g = svg
+                .append("g")
+                .attr(
+                  "transform",
+                  "translate(" + width / 2 + "," + height / 2 + ")"
+                );
+
+            var color = d3.scaleOrdinal(colorFirstRow);
+            var label = d3
+              .arc()
+              .outerRadius(radius)
+              .innerRadius(radius - 80);
+            // Generate the pie
+            var pie = d3.pie();
+
+            // Generate the arcs
+            var arc = d3.arc().innerRadius(0).outerRadius(radius);
+
+            //Generate groups
+            var arcs = g
+              .selectAll("arc")
+              .data(pie(firstRow))
+              .enter()
+              .append("g")
+              .attr("class", "arc");
+
+            //Draw arc paths
+            arcs
+              .append("path")
+              .attr("fill", function (d, i) {
+                return color(i);
+              })
+              .attr("d", arc);
+
+            // arcs
+            //   .append("text")
+            //   .attr("transform", function (d) {
+            //     return "translate(" + label.centroid(d) + ")";
+            //   })
+            //   .attr("text-anchor", "middle")
+            //   .text(function (d, i) {
+            //     return title[i]; // Use title data for labels
+            //   });
+
+              // Query to colorList
+            var colorList = document.querySelector(".color-list");
+
+            colorFirstRow.map((ele, i) => {
+
+              // Create colorItem
+              var colorItem = document.createElement("div");
+              colorItem.style.display = "flex"
+              var colorBlock = document.createElement("span");
+              colorBlock.style.display = "block";
+              colorBlock.style.width = "20px";
+              colorBlock.style.height = "20px";
+
+              var spanLanguage = document.createElement("span");
+
+              colorBlock.style.backgroundColor = ele;
+              spanLanguage.textContent = title[i];
+              colorItem.appendChild(colorBlock);
+              colorItem.appendChild(spanLanguage);
+              colorList.appendChild(colorItem);
+            });
+          };
+        } else {
+          alert("Please select a file.");
+        }
+      }
+    </script>
+  </body>
+</html>
