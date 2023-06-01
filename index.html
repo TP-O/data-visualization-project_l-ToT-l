@@ -2,42 +2,48 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Programming Language Popularity</title>
-	<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Programming Language Popularity</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+
+  </style>
 </head>
 
 <body>
-	<div id="select">
-		<label for="select-date">Select Date</label>
-		<select id="select-date"></select>
-	</div>
+  <div class="date-selector">
+    <label for="date">Select Date:</label>
+    <select id="select-date"></select>
+  </div>
 
-	<div>
-		<h3>Pie Chart</h3>
-		<div id="chart-1">
-			<div id="color-list-1"></div>
-		</div>
-	</div>
+  <div id="partial-chart">
+    <div>
+      <h3>Pie Chart</h3>
+      <div id="chart-1">
+        <div id="color-list-1"></div>
+      </div>
+    </div>
 
-	<div>
-		<h3>Bar Chart</h3>
-		<div id="chart-2">
-			<svg height="300" width="400"></svg>
-		</div>
-	</div>
+    <div id="chart-2">
+      <h3 style="text-align: center">Horizontal Bar Chart</h3>
+      <div style="display: flex; justify-content: center">
+        <svg class="chart-2"></svg>
+      </div>
+    </div>
+  </div>
 
-	<div id="chart-3">
-		<h3>Chart 3</h3>
-	</div>
+  <div id="chart-3">
+    <svg class="chart-3"></svg>
+  </div>
 
-	<script src="https://d3js.org/d3.v7.min.js"></script>
-	<script src="util.js"></script>
-	<script src="chart-1.js"></script>
-	<script src="chart-2.js"></script>
-	<script src="chart-3.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="util.js"></script>
+  <script src="chart-1.js"></script>
+  <script src="chart-2.js"></script>
+  <script src="chart-3.js"></script>
+  <script src="main.js"></script>
 </body>
 
 </html>
