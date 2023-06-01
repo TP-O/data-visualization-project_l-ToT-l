@@ -7,7 +7,7 @@ function drawChart1(label, data) {
 	svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 	svg.setAttribute("width", 400);
 	svg.setAttribute("height", 300);
-	document.getElementById("chart-1").appendChild(svg);
+	document.getElementById("chart-1").prepend(svg);
 
 	var colorFirstRow = data.map(() => randomRgbColor());
 	var svg = d3.select("#chart-1 svg"),
