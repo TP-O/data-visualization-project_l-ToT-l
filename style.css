@@ -1,3 +1,7 @@
+h3 {
+	text-align: center;
+}
+
 #select {
 	margin-bottom: 50px;
 	text-align: center;
@@ -6,4 +10,5 @@
 #chart-1 {
 	display: flex;
 	align-items: center;
+	justify-content: center;
 }

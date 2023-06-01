@@ -3,7 +3,7 @@ function drawChart1(label, data) {
 	var svg = d3.select("#chart-1 > svg"),
 		width = svg.attr("width"),
 		height = svg.attr("height"),
-		radius = Math.min(width, height) / 2.6,
+		radius = Math.min(width, height) / 2.8,
 		g = svg
 			.append("g")
 			.attr(
@@ -42,7 +42,7 @@ function drawChart1(label, data) {
     return `translate(${x},${y})`;
   })
   .attr("text-anchor", "middle")
-  .text(d => `${Math.floor(d.data)}%`);
+  .text(d => `${d.data.toFixed(2)}%`);
 
 	// Query to colorList
 	var colorList = document.querySelector("#color-list-1");
