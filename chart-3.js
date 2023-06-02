@@ -4,11 +4,13 @@ const height3 = 600;
 const margin3 = { top: 20, right: 20, bottom: 30, left: 50 };
 
 // Create a table of programming languages
-const table = d3.select("#table")
-  .append("table");
+const table = d3.select("#table").append("table");
+
+// Create the table below the chart for the legend
+const legendTable = d3.select("#legend").append("table");
 
 // Fetch the data from data.json
-d3.json("https://raw.githubusercontent.com/TP-O/data-visualization-project_l-ToT-l/khang%2Btris/data.json").then(data => {
+d3.json("https://raw.githubusercontent.com/TP-O/data-visualization-project_l-ToT-l/main/data.json").then((data) => {
   // Parse the date format
   const parseDate = d3.timeParse("%B %Y");
 
@@ -63,10 +65,7 @@ d3.json("https://raw.githubusercontent.com/TP-O/data-visualization-project_l-ToT
     .call(d3.axisBottom(xScale));
 
   // Add y-axis
-  svg
-    .append("g")
-    .attr("transform", `translate(${margin3.left}, 0)`)
-    .call(d3.axisLeft(yScale));
+  svg.append("g").attr("transform", `translate(${margin3.left}, 0)`).call(d3.axisLeft(yScale));
 
   // Add axis labels and chart title
   svg
@@ -91,6 +90,9 @@ d3.json("https://raw.githubusercontent.com/TP-O/data-visualization-project_l-ToT
     d3.max(data, (d) => d3.max(programmingLanguages, (key) => d[key])),
   ]);
 
+  // Initialize an empty array to store selected languages
+  let selectedLanguages = [];
+
   // Add rows to the table
   const rows = table
     .selectAll("tr")
@@ -104,8 +106,12 @@ d3.json("https://raw.githubusercontent.com/TP-O/data-visualization-project_l-ToT
       // Toggle selection
       d3.select(this).classed("selected", !isSelected);
 
-      // Get all selected languages
-      const selectedLanguages = table.selectAll(".selected").data();
+      // Update the selectedLanguages array
+      if (isSelected) {
+        selectedLanguages = selectedLanguages.filter((lang) => lang !== selectedLanguage);
+      } else {
+        selectedLanguages.push(selectedLanguage);
+      }
 
       // Clear the SVG element
       svg.selectAll(".line").remove();
@@ -123,9 +129,12 @@ d3.json("https://raw.githubusercontent.com/TP-O/data-visualization-project_l-ToT
           .attr("class", "line")
           .attr("d", lineGenerator)
           .attr("fill", "none")
-          .attr("stroke", randomRgbColor())
+          .attr("stroke", getColor(i))
           .attr("stroke-width", 2);
       });
+
+      // Update the legend table
+      updateLegendTable(selectedLanguages);
     });
 
   // Add cells to the rows
@@ -139,17 +148,48 @@ d3.json("https://raw.githubusercontent.com/TP-O/data-visualization-project_l-ToT
 
   // Update the x-axis with the date format
   svg.select("g").call(d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y")));
-});
 
-// Function to generate different colors for programming languages
-function getColor(index) {
-  const colors = ["steelblue", "darkorange", "green", "red", "purple", "teal", "gold", "blueviolet"];
-  return colors[index % colors.length];
-}
+  // Function to generate different colors for programming languages
+  function getColor(index) {
+    const colors = [
+      "steelblue",
+      "darkorange",
+      "green",
+      "red",
+      "purple",
+      "teal",
+      "gold",
+      "blueviolet",
+    ];
+    return colors[index % colors.length];
+  }
+
+  // Function to update the legend table
+  function updateLegendTable(languages) {
+    // Remove existing rows
+    legendTable.selectAll("tr").remove();
+
+    // Add rows to the legend table
+    const legendRows = legendTable
+      .selectAll("tr")
+      .data(languages)
+      .enter()
+      .append("tr");
+
+    // Add color swatch cells
+    legendRows
+      .append("td")
+      .attr("class", "legend-color")
+      .style("background-color", (d, i) => getColor(i));
+
+    // Add language name cells
+    legendRows.append("td").text((d) => d);
+  }
+});
 
 const randomRgbColor = () => {
   let r = Math.floor(Math.random() * 256); // Random between 0-255
   let g = Math.floor(Math.random() * 256); // Random between 0-255
   let b = Math.floor(Math.random() * 256); // Random between 0-255
   return "rgb(" + r + "," + g + "," + b + ")";
-}
+};
