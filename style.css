@@ -44,3 +44,40 @@ h3 {
   color: #fff;
   pointer-events: none;
 }
+#container {
+  display: flex;
+  flex-direction: column;
+}
+
+#chart {
+  flex: 1;
+  margin-right: 20px;
+}
+
+#table > table {
+  display: flex;
+}
+
+td {
+  cursor: pointer;
+  padding: 5px;
+}
+
+.selected {
+  background-color: lightblue;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2px;
+}
+
+.axis-label {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.chart-title {
+  font-size: 16px;
+  font-weight: bold;
+}
